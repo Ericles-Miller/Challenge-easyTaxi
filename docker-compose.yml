@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:15.3-alpine
+    container_name: my_postgres_NestJs
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_USER: myuser
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql 
+
+volumes:
+  pgdata:
