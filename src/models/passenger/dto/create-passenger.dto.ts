@@ -30,6 +30,10 @@ export class CreatePassengerDto {
     example: '+55 (19) 991928543',
     description: 'phone passenger',
   })
+  @Matches(/^[\+\-\(\)\d\s]+$/, {
+    message:
+      'Phone number can only contain numbers, spaces, and the following characters: +, (, ), -',
+  })
   @Transform(({ value }) => value?.replace(/\D/g, ''), { toClassOnly: true })
   @MinLength(13, {
     message:
