@@ -8,8 +8,8 @@ import { PassengerModule } from './models/passenger/passenger.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot(dataSourceOptions),
+    ConfigModule.forRoot({ isGlobal: true }),
     PassengerModule,
   ],
   controllers: [AppController],
