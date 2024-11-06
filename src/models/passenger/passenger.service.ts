@@ -1,26 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreatePassengerDto } from './dto/create-passenger.dto';
-import { UpdatePassengerDto } from './dto/update-passenger.dto';
+import { Passenger } from './entities/passenger.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PassengerService {
-  create(createPassengerDto: CreatePassengerDto) {
-    return 'This action adds a new passenger';
-  }
+  constructor(
+    @InjectRepository(Passenger)
+    private readonly repository: Repository<Passenger>,
+  ) {}
 
-  findAll() {
-    return `This action returns all passenger`;
-  }
+  async create({ name, phone }: CreatePassengerDto): Promise<Passenger> {
+    try {
+      const passengerExists = await this.repository.findOne({
+        where: { phone },
+      });
+      if (passengerExists)
+        throw new BadRequestException(
+          'The phone already exists to other passenger.',
+        );
 
-  findOne(id: number) {
-    return `This action returns a #${id} passenger`;
-  }
+      let passenger = new Passenger(name, phone);
 
-  update(id: number, updatePassengerDto: UpdatePassengerDto) {
-    return `This action updates a #${id} passenger`;
-  }
+      passenger = await this.repository.save(passenger);
+      return passenger;
+    } catch (error) {
+      if (error instanceof BadRequestException) throw error;
 
-  remove(id: number) {
-    return `This action removes a #${id} passenger`;
+      throw new InternalServerErrorException(
+        'Unexpected server error to create a new passenger',
+      );
+    }
   }
 }

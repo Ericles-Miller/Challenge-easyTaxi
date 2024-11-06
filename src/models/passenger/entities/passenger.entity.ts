@@ -1,6 +1,7 @@
-import { Column } from 'typeorm';
-import { BaseEntity } from 'typeorm/repository/BaseEntity';
+import { BaseEntity } from 'src/domain/GeneralEntitys/BaseEntity';
+import { Column, Entity } from 'typeorm';
 
+@Entity({ name: 'passenger' })
 export class Passenger extends BaseEntity {
   @Column()
   name: string;
