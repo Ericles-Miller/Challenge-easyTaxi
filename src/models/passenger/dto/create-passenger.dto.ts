@@ -31,7 +31,13 @@ export class CreatePassengerDto {
     description: 'phone passenger',
   })
   @Transform(({ value }) => value?.replace(/\D/g, ''), { toClassOnly: true })
-  @MinLength(13, { message: 'The phone number be at least 13 characters long' })
-  @MaxLength(20, { message: 'the phone number not exceed 20 characters' })
+  @MinLength(13, {
+    message:
+      'The phone number be at least 13 characters long or contains invalids characters.',
+  })
+  @MaxLength(20, {
+    message:
+      'the phone number not exceed 20 characters or contains invalids characters.',
+  })
   phone: string;
 }
