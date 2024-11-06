@@ -4,6 +4,10 @@ import { PassengerService } from './passenger.service';
 import { v4 as uuid } from 'uuid';
 import { Passenger } from './entities/passenger.entity';
 import { CreatePassengerDto } from './dto/create-passenger.dto';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 
 const passenger: Passenger = {
   id: uuid(),
@@ -12,24 +16,13 @@ const passenger: Passenger = {
   phone: '5519991928157',
 };
 
+const mockService = {
+  create: jest.fn(),
+};
+
 describe('PassengerController', () => {
   let controller: PassengerController;
   let service: PassengerService;
-
-  let body: CreatePassengerDto;
-
-  const requestMock = {
-    body,
-  };
-
-  const statusResponseMock = {
-    send: jest.fn((x) => x),
-  };
-
-  const responseMock = {
-    status: jest.fn((x) => statusResponseMock),
-    send: jest.fn((x) => x),
-  } as unknown as Response;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -37,9 +30,7 @@ describe('PassengerController', () => {
       providers: [
         {
           provide: PassengerService,
-          useValue: {
-            create: jest.fn().mockResolvedValue(passenger),
-          },
+          useValue: mockService,
         },
       ],
     }).compile();
@@ -55,45 +46,61 @@ describe('PassengerController', () => {
     expect(service).toBeDefined();
   });
 
-  // describe('method create controller passenger', () => {
-  //   it('should create a passenger successfully', async () => {
-  //     const body: CreatePassengerDto = {
-  //       name: 'John Doe',
-  //       phone: '5519991928157',
-  //     };
-
-  //     const result = await controller.create(body);
-
-  //     expect(result).toEqual(passenger);
-  //     expect(service.create).toHaveBeenCalledTimes(1);
-  //     expect(service.create).toHaveBeenCalledWith(body);
-  //   });
-
-  //   it('should return an object of type Passenger', async () => {
-  //     const body: CreatePassengerDto = {
-  //       name: 'John Doe',
-  //       phone: '5519991928157',
-  //     };
-
-  //     const result = await controller.create(body);
-
-  //     expect(result).toEqual(passenger);
-  //   });
-  // });
-
-  describe('should return status code', () => {
-    it('should return status 201 when a passenger is created successfully', async () => {});
-
-    it('should return status 400 when validation fails (invalid input)', async () => {
-      const createPassengerDto: CreatePassengerDto = {
-        name: '',
-        phone: '+5538991928653',
+  describe('method create controller passenger', () => {
+    it('should create a passenger successfully', async () => {
+      const body: CreatePassengerDto = {
+        name: 'John Doe',
+        phone: '5519991928157',
       };
 
-      requestMock.body = createPassengerDto;
+      mockService.create.mockResolvedValue(passenger);
 
-      await controller.create(requestMock.body);
-      expect(responseMock.status).toHaveBeenCalledWith(400);
+      const result = await controller.create(body);
+
+      expect(result).toEqual(passenger);
+      expect(service.create).toHaveBeenCalledTimes(1);
+      expect(service.create).toHaveBeenCalledWith(body);
+    });
+
+    it('should return an object of type Passenger', async () => {
+      const body: CreatePassengerDto = {
+        name: 'Jo',
+        phone: '5519991928157',
+      };
+
+      const result = await controller.create(body);
+
+      expect(result).toEqual(passenger);
+    });
+
+    it('should throw Bad request error', async () => {
+      const body: CreatePassengerDto = {
+        name: 'Jo',
+        phone: '5519991928157',
+      };
+
+      mockService.create.mockRejectedValue(
+        new BadRequestException('Name must be at least 3 characters long'),
+      );
+
+      await expect(service.create(body)).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw Internal server Error', async () => {
+      const body: CreatePassengerDto = {
+        name: 'John Doe',
+        phone: '5519991928157',
+      };
+
+      mockService.create.mockRejectedValue(
+        new InternalServerErrorException(
+          'Unexpected server error to create a new passenger',
+        ),
+      );
+
+      await expect(service.create(body)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 });
