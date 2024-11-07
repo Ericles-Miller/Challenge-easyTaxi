@@ -11,7 +11,7 @@ export const dataSourceOptions: DataSourceOptions = {
   port: Number(process.env.DATABASE_PORT),
   synchronize: false,
   entities: [Passenger, Driver],
-  migrations: [__dirname + './migrations/*{.ts,.js}'],
+  migrations: [__dirname + '/migrations/*{.ts,.js}'],
   migrationsRun: true,
   logging: process.env.NODE_ENV === 'development' ? true : false,
 };
