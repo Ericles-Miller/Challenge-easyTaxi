@@ -4,10 +4,7 @@ import { PassengerService } from './passenger.service';
 import { v4 as uuid } from 'uuid';
 import { Passenger } from './entities/passenger.entity';
 import { CreatePassengerDto } from './dto/create-passenger.dto';
-import {
-  BadRequestException,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
 
 const passenger: Passenger = {
   id: uuid(),
@@ -93,14 +90,10 @@ describe('PassengerController', () => {
       };
 
       mockService.create.mockRejectedValue(
-        new InternalServerErrorException(
-          'Unexpected server error to create a new passenger',
-        ),
+        new InternalServerErrorException('Unexpected server error to create a new passenger'),
       );
 
-      await expect(service.create(body)).rejects.toThrow(
-        InternalServerErrorException,
-      );
+      await expect(service.create(body)).rejects.toThrow(InternalServerErrorException);
     });
   });
 });
