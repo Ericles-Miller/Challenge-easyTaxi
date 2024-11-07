@@ -1,5 +1,6 @@
 import { Driver } from 'src/models/driver/entities/driver.entity';
 import { Passenger } from 'src/models/passenger/entities/passenger.entity';
+import { Ride } from 'src/models/ride/entities/ride.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 export const dataSourceOptions: DataSourceOptions = {
@@ -10,7 +11,7 @@ export const dataSourceOptions: DataSourceOptions = {
   database: process.env.DATABASE_NAME,
   port: Number(process.env.DATABASE_PORT),
   synchronize: false,
-  entities: [Passenger, Driver],
+  entities: [Passenger, Driver, Ride],
   migrations: [__dirname + '/migrations/*{.ts,.js}'],
   migrationsRun: true,
   logging: process.env.NODE_ENV === 'development' ? true : false,
