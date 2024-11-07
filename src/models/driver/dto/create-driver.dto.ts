@@ -15,7 +15,7 @@ export class CreateDriverDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(3, { message: 'Name must be at least 3 characters long' })
-  @MaxLength(35, { message: 'Name must not exceed 100 characters' })
+  @MaxLength(35, { message: 'Name must not exceed 35 characters' })
   car: string;
 
   @ApiProperty({
