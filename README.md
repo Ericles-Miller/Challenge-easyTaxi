@@ -10,7 +10,7 @@
     - Modelo de Dados Básico:
     - Tabelas para Passageiros, Motoristas, e Corridas com as seguintes informações mínimas:
     - Passageiro: id, nome, telefone --ok
-    - Motorista: id, nome, carro, telefone
+    - Motorista: id, nome, carro, telefone --ok
     - Corrida: id, passageiro_id, motorista_id, status, origem, destino, data_hora_solicitacao, data_hora_inicio, data_hora_fim, valor
  - Sinta-se à vontade para adicionar outros campos, caso considere necessário.
 
@@ -24,20 +24,20 @@
 
 
 ## Observação:
- - A API funcionará recebendo os dados no formato JSON e vai devolver o output no formato JSON.
+ - A API funcionará recebendo os dados no formato JSON e vai devolver o output no formato JSON. --ok
  - Diferencial: Implementação de testes automatizados para validação das funcionalidades.
 
 
 
 ## Funcionalidades e Endpoints
  - Funcionalidades:
-    - Cadastro de Passageiros e Motoristas.
+    - Cadastro de Passageiros e Motoristas. --ok 
     - Solicitação de uma Corrida (inicialmente com o status "Aguardando Motorista").
     - Alteração do status de uma corrida para "Em Andamento" e "Finalizada".
 
  - Endpoints:
     - POST /passengers: Cadastrar um passageiro. -- ok
-    - POST /drivers: Cadastrar um motorista.
+    - POST /drivers: Cadastrar um motorista. -- ok
     - POST /rides: Criar uma nova corrida.
     - PATCH /rides: Atualizar o status de uma corrida.
     - GET /rides: Lista uma corrida por id.
@@ -48,7 +48,7 @@
     - Alterar o status para "Finalizada" somente se estiver em "Em Andamento".
 
 - Exemplo de Fluxo:
-    - Um passageiro é cadastrado. -- ok 
-    - Um motorista é cadastrado.
+    - Um passageiro é cadastrado. --ok
+    - Um motorista é cadastrado. --ok
     - O passageiro solicita uma corrida.
     - O motorista inicia e finaliza a corrida.
