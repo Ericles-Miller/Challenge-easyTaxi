@@ -2,14 +2,15 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { RideService } from './ride.service';
 import { CreateRideDto } from './dto/create-ride.dto';
 import { UpdateRideDto } from './dto/update-ride.dto';
-import { Ride } from './entities/ride.entity';
+import { RideFullResponseDTO } from './dto/ride-full-response.dto';
+import { RideShortResponseDTO } from './dto/ride-short-response.dto';
 
 @Controller('ride')
 export class RideController {
   constructor(private readonly rideService: RideService) {}
 
   @Post()
-  async create(@Body() createRideDto: CreateRideDto): Promise<Ride> {
+  async create(@Body() createRideDto: CreateRideDto): Promise<RideShortResponseDTO> {
     return await this.rideService.create(createRideDto);
   }
 
@@ -19,8 +20,8 @@ export class RideController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.rideService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<RideFullResponseDTO> {
+    return await this.rideService.findOne(id);
   }
 
   @Patch(':id')

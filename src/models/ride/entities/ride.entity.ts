@@ -32,11 +32,11 @@ export class Ride extends BaseEntity {
 
   @ManyToOne(() => Driver, (driver) => driver.ride)
   @JoinColumn({ name: 'driverId' })
-  driver: Driver[];
+  driver: Driver;
 
   @ManyToOne(() => Passenger, (passenger) => passenger.ride)
   @JoinColumn({ name: 'passengerId' })
-  passenger: Passenger[];
+  passenger: Passenger;
 
   constructor(origin: string, destination: string, value: number, passengerId: string) {
     super();
@@ -61,5 +61,9 @@ export class Ride extends BaseEntity {
 
   setDriverId(driverId: string): void {
     this.driverId = driverId;
+  }
+
+  getNamePassenger(name: string): void {
+    this.passengerId = name;
   }
 }
