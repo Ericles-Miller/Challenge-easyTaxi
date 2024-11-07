@@ -1,12 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import {
-  IsNotEmpty,
-  IsString,
-  Matches,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsNotEmpty, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
 export class CreateDriverDto {
   @ApiProperty({
@@ -14,6 +8,9 @@ export class CreateDriverDto {
     required: true,
     example: 'Celta',
     description: 'name car',
+  })
+  @Matches(/^[A-Za-zÀ-ÿ0-9\s]+$/, {
+    message: 'The name contains invalids characters',
   })
   @IsString()
   @IsNotEmpty()
@@ -43,17 +40,14 @@ export class CreateDriverDto {
     description: 'phone passenger',
   })
   @Matches(/^[\+\-\(\)\d\s]+$/, {
-    message:
-      'Phone number can only contain numbers, spaces, and the following characters: +, (, ), -',
+    message: 'Phone number can only contain numbers, spaces, and the following characters: +, (, ), -',
   })
   @Transform(({ value }) => value?.replace(/\D/g, ''), { toClassOnly: true })
   @MinLength(13, {
-    message:
-      'The phone number be at least 13 characters long or contains invalids characters.',
+    message: 'The phone number be at least 13 characters long or contains invalids characters.',
   })
   @MaxLength(20, {
-    message:
-      'the phone number not exceed 20 characters or contains invalids characters.',
+    message: 'the phone number not exceed 20 characters or contains invalids characters.',
   })
   phone: string;
 }
