@@ -1,16 +1,16 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
-import { PassengerService } from './passenger.service';
-import { CreatePassengerDto } from './dto/create-passenger.dto';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { DriverService } from './driver.service';
+import { CreateDriverDto } from './dto/create-driver.dto';
+import { Driver } from './entities/driver.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Passenger } from './entities/passenger.entity';
 
-@ApiTags('Passengers')
-@Controller('passenger')
-export class PassengerController {
-  constructor(private readonly passengerService: PassengerService) {}
+@ApiTags('Drivers')
+@Controller('driver')
+export class DriverController {
+  constructor(private readonly driverService: DriverService) {}
 
-  @ApiOperation({ summary: 'Create a new passenger with data in request.' })
-  @ApiResponse({ status: 201, description: 'Passenger created with success' })
+  @ApiOperation({ summary: 'Create a new driver with data in request.' })
+  @ApiResponse({ status: 201, description: 'driver created with success' })
   @ApiResponse({
     status: 400,
     description: 'Bad Request. Validation errors or invalid data.',
@@ -20,8 +20,8 @@ export class PassengerController {
     description: 'Internal Server Error. Something went wrong on the server.',
   })
   @Post()
-  async create(@Body() createPassengerDto: CreatePassengerDto): Promise<Passenger> {
-    return await this.passengerService.create(createPassengerDto);
+  create(@Body() createDriverDto: CreateDriverDto) {
+    return this.driverService.create(createDriverDto);
   }
 
   @ApiOperation({ summary: 'List all passenger' })
@@ -31,8 +31,8 @@ export class PassengerController {
     description: 'Internal Server Error. Something went wrong on the server.',
   })
   @Get()
-  async findAll(): Promise<Passenger[]> {
-    return await this.passengerService.findAll();
+  async findAll(): Promise<Driver[]> {
+    return await this.driverService.findAll();
   }
 
   @ApiOperation({ summary: 'List passenger by id' })
@@ -46,7 +46,7 @@ export class PassengerController {
     description: 'Internal Server Error. Something went wrong on the server.',
   })
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Passenger> {
-    return await this.passengerService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<Driver> {
+    return await this.driverService.findOne(id);
   }
 }
