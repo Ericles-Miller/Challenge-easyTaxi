@@ -17,7 +17,7 @@ export class DriverService {
         where: { phone },
       });
 
-      if (driverExists) throw new BadRequestException('This phone already exists to other user');
+      if (driverExists) throw new BadRequestException('This phone already exists to other user.');
 
       let driver = new Driver(name, phone, car);
 
