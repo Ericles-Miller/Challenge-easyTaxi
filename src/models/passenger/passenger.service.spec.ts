@@ -5,10 +5,7 @@ import { Passenger } from './entities/passenger.entity';
 import { v4 as uuid } from 'uuid';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreatePassengerDto } from './dto/create-passenger.dto';
-import {
-  BadRequestException,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
 
 const passenger: Passenger = {
   id: uuid(),
@@ -36,9 +33,7 @@ describe('PassengerService', () => {
     }).compile();
 
     service = module.get<PassengerService>(PassengerService);
-    repository = module.get<Repository<Passenger>>(
-      getRepositoryToken(Passenger),
-    );
+    repository = module.get<Repository<Passenger>>(getRepositoryToken(Passenger));
   });
 
   it('should be defined', () => {
@@ -82,15 +77,11 @@ describe('PassengerService', () => {
     });
 
     it('should throw InternalServerErrorException on unexpected error', async () => {
-      jest
-        .spyOn(repository, 'findOne')
-        .mockRejectedValue(new Error('Database failure'));
+      jest.spyOn(repository, 'findOne').mockRejectedValue(new Error('Database failure'));
 
       const createPassengerDto = { name: 'John Doe', phone: '123456789' };
 
-      await expect(service.create(createPassengerDto)).rejects.toThrow(
-        InternalServerErrorException,
-      );
+      await expect(service.create(createPassengerDto)).rejects.toThrow(InternalServerErrorException);
     });
   });
 });

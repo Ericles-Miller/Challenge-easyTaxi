@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreatePassengerDto } from './dto/create-passenger.dto';
 import { Passenger } from './entities/passenger.entity';
 import { Repository } from 'typeorm';
@@ -20,10 +16,7 @@ export class PassengerService {
       const passengerExists = await this.repository.findOne({
         where: { phone },
       });
-      if (passengerExists)
-        throw new BadRequestException(
-          'The phone already exists to other passenger.',
-        );
+      if (passengerExists) throw new BadRequestException('The phone already exists to other passenger.');
 
       let passenger = new Passenger(name, phone);
 
@@ -32,9 +25,21 @@ export class PassengerService {
     } catch (error) {
       if (error instanceof BadRequestException) throw error;
 
-      throw new InternalServerErrorException(
-        'Unexpected server error to create a new passenger',
-      );
+      throw new InternalServerErrorException('Unexpected server error to create a new passenger');
     }
+  }
+
+  async findAll(): Promise<Passenger[]> {
+    return await this.repository.find();
+  }
+
+  async findOne(id: string): Promise<Passenger> {
+    const driver = await this.repository.findOne({
+      where: { id },
+    });
+
+    if (!driver) throw new BadRequestException('Does not exists driver with id');
+
+    return driver;
   }
 }

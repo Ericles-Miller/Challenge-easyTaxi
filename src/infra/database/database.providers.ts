@@ -1,3 +1,4 @@
+import { Driver } from 'src/models/driver/entities/driver.entity';
 import { Passenger } from 'src/models/passenger/entities/passenger.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
@@ -9,10 +10,10 @@ export const dataSourceOptions: DataSourceOptions = {
   database: process.env.DATABASE_NAME,
   port: Number(process.env.DATABASE_PORT),
   synchronize: false,
-  logging: process.env.NODE_ENV === 'development' ? true : false,
-  entities: [Passenger],
-  migrations: [__dirname + '/migrations/*{.ts,.js}'],
+  entities: [Passenger, Driver],
+  migrations: [__dirname + './migrations/*{.ts,.js}'],
   migrationsRun: true,
+  logging: process.env.NODE_ENV === 'development' ? true : false,
 };
 
 const dataSource = new DataSource(dataSourceOptions);
