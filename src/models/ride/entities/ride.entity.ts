@@ -21,7 +21,7 @@ export class Ride extends BaseEntity {
   @Column()
   finishedAt?: Date;
 
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   value: number;
 
   @Column()

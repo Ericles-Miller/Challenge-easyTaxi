@@ -7,8 +7,8 @@ import { Repository } from 'typeorm';
 import { Passenger } from '../passenger/entities/passenger.entity';
 import { Driver } from '../driver/entities/driver.entity';
 import { RideFullResponseDTO } from './dto/ride-full-response.dto';
-import { MappingRide } from 'src/domain/Mappings/MappingRide';
 import { RideShortResponseDTO } from './dto/ride-short-response.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class RideService {
@@ -21,8 +21,6 @@ export class RideService {
 
     @InjectRepository(Driver)
     private readonly driverRepository: Repository<Driver>,
-
-    private mapper: MappingRide,
   ) {}
 
   async create({ destination, origin, passengerId, value }: CreateRideDto): Promise<RideShortResponseDTO> {
@@ -36,7 +34,9 @@ export class RideService {
 
       ride = await this.rideRepository.save(ride);
 
-      const response = this.mapper.mapperEntityToShortResponse(ride, passengerExists.name);
+      const response = plainToInstance(RideShortResponseDTO, ride, {
+        excludeExtraneousValues: true,
+      });
 
       return response;
     } catch (error) {
@@ -55,7 +55,9 @@ export class RideService {
       const ride = await this.rideRepository.findOne({ where: { id }, relations: ['passenger', 'driver'] });
       if (!ride) throw new BadRequestException('id of ride is incorrect');
 
-      return this.mapper.mapperEntityToFullResponse(ride);
+      return plainToInstance(RideFullResponseDTO, ride, {
+        excludeExtraneousValues: true,
+      });
     } catch (error) {
       if (error instanceof BadRequestException) throw error;
 

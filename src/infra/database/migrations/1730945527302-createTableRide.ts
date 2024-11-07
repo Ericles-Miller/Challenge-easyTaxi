@@ -47,7 +47,9 @@ export class CreateTableRide1730945527302 implements MigrationInterface {
           },
           {
             name: 'value',
-            type: 'real',
+            type: 'decimal',
+            precision: 10,
+            scale: 2,
           },
           {
             name: 'passengerId',

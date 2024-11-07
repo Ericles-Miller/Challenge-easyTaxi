@@ -5,11 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Ride } from './entities/ride.entity';
 import { Driver } from '../driver/entities/driver.entity';
 import { Passenger } from '../passenger/entities/passenger.entity';
-import { MappingRide } from 'src/domain/Mappings/MappingRide';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Ride, Driver, Passenger])],
   controllers: [RideController],
-  providers: [MappingRide, RideService],
+  providers: [RideService],
 })
 export class RideModule {}
