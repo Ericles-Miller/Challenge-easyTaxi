@@ -28,7 +28,7 @@ export class Ride extends BaseEntity {
   passengerId: string;
 
   @Column()
-  driverId: string;
+  driverId?: string;
 
   @ManyToOne(() => Driver, (driver) => driver.ride)
   @JoinColumn({ name: 'driverId' })
@@ -38,13 +38,13 @@ export class Ride extends BaseEntity {
   @JoinColumn({ name: 'passengerId' })
   passenger: Passenger[];
 
-  constructor(origin: string, destination: string, value: number, passengerId: string, driverId: string) {
+  constructor(origin: string, destination: string, value: number, passengerId: string) {
     super();
     this.origin = origin;
     this.destination = destination;
     this.passengerId = passengerId;
-    this.driverId = driverId;
     this.value = value;
+    this.setStatusRide(EStatusRide.WAIT);
   }
 
   setStartedAt(): void {
@@ -57,5 +57,9 @@ export class Ride extends BaseEntity {
 
   setStatusRide(status: EStatusRide): void {
     this.status = status;
+  }
+
+  setDriverId(driverId: string): void {
+    this.driverId = driverId;
   }
 }

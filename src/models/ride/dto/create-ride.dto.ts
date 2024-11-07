@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsUUID, MaxLength, Min, MinLength } from 'class-validator';
 
 export class CreateRideDto {
   @ApiProperty({
@@ -29,12 +29,12 @@ export class CreateRideDto {
   @IsNumber({
     maxDecimalPlaces: 2,
   })
-  @MinLength(0.1, { message: 'the run value must be greater than 0.0' })
+  @Min(0.1, { message: 'the run value must be greater than 0.0' })
   @ApiProperty({
     type: Number,
     required: true,
     description: 'value of ride',
-    example: '35,43',
+    example: 35.43,
   })
   value: number;
 
@@ -46,14 +46,4 @@ export class CreateRideDto {
   })
   @IsUUID()
   passengerId: string;
-
-  @ApiProperty({
-    type: String,
-    required: true,
-    description: `driver's id`,
-    example: 'd4c5593d-1c35-430c-bf64-ded0a548acbb',
-  })
-  @IsUUID()
-  @ApiProperty()
-  driverId: string;
 }

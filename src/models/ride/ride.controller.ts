@@ -2,14 +2,15 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { RideService } from './ride.service';
 import { CreateRideDto } from './dto/create-ride.dto';
 import { UpdateRideDto } from './dto/update-ride.dto';
+import { Ride } from './entities/ride.entity';
 
 @Controller('ride')
 export class RideController {
   constructor(private readonly rideService: RideService) {}
 
   @Post()
-  create(@Body() createRideDto: CreateRideDto) {
-    return this.rideService.create(createRideDto);
+  async create(@Body() createRideDto: CreateRideDto): Promise<Ride> {
+    return await this.rideService.create(createRideDto);
   }
 
   @Get()
