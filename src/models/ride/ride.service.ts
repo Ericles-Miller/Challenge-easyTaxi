@@ -43,7 +43,7 @@ export class RideService {
     } catch (error) {
       if (error instanceof BadRequestException) throw error;
 
-      throw new InternalServerErrorException('Unexpected server error to create ride');
+      throw new InternalServerErrorException('Unexpected server error to create ride.');
     }
   }
 

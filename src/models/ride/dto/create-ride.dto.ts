@@ -10,8 +10,8 @@ export class CreateRideDto {
   })
   @IsString()
   @IsNotEmpty()
-  @MinLength(3, { message: 'Name must be at least 3 characters long' })
-  @MaxLength(100, { message: 'Name must not exceed 100 characters' })
+  @MinLength(3, { message: 'origin must be at least 3 characters long' })
+  @MaxLength(100, { message: 'origin must not exceed 100 characters' })
   origin: string;
 
   @ApiProperty({
@@ -22,8 +22,8 @@ export class CreateRideDto {
   })
   @IsString()
   @IsNotEmpty()
-  @MinLength(3, { message: 'Name must be at least 3 characters long' })
-  @MaxLength(100, { message: 'Name must not exceed 100 characters' })
+  @MinLength(3, { message: 'destination must be at least 3 characters long' })
+  @MaxLength(100, { message: 'destination must not exceed 100 characters' })
   destination: string;
 
   @IsNumber({

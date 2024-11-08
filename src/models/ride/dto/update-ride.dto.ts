@@ -1,6 +1,6 @@
 import { EStatusRide } from 'src/domain/enums/status-rides.enum';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsUUID } from 'class-validator';
+import { IsNotEmpty, IsUUID } from 'class-validator';
 import { IsEnumValidToRequest } from 'src/domain/validations/enum-validator';
 
 export class UpdateRideDto {
@@ -10,6 +10,7 @@ export class UpdateRideDto {
     description: 'driver id',
     example: 'd4c5593d-1c35-430c-bf64-ded0a548acbb',
   })
+  @IsNotEmpty()
   @IsUUID()
   driverId: string;
 
