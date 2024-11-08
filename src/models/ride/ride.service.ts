@@ -29,10 +29,10 @@ export class RideService {
       const passengerExists = await this.passengerRepository.findOne({
         where: { id: passengerId },
       });
-      if (!passengerExists) throw new BadRequestException('Passenger id does not exists');
+      if (!passengerExists) throw new BadRequestException('Passenger id does not exists.');
 
       let ride = new Ride(origin, destination, value, passengerId);
-
+      ride.passenger = passengerExists;
       ride = await this.rideRepository.save(ride);
 
       const response = plainToInstance(RideShortResponseDTO, ride, {
@@ -50,7 +50,7 @@ export class RideService {
   async findOne(id: string): Promise<RideFullResponseDTO> {
     try {
       const ride = await this.rideRepository.findOne({ where: { id }, relations: ['passenger', 'driver'] });
-      if (!ride) throw new BadRequestException('id of ride is incorrect');
+      if (!ride) throw new BadRequestException('id of ride is incorrect.');
 
       return plainToInstance(RideFullResponseDTO, ride, {
         excludeExtraneousValues: true,
@@ -69,14 +69,14 @@ export class RideService {
         relations: ['passenger', 'driver'],
       });
 
-      if (!ride) throw new BadRequestException('Does not exists ride with id');
+      if (!ride) throw new BadRequestException('Does not exists ride with id.');
 
       if (ride.driver) {
-        if (ride.driver.id !== driverId) throw new BadRequestException('This ride already has a driver');
+        if (ride.driver.id !== driverId) throw new BadRequestException('This ride already has a driver.');
       }
 
       if (ride.status === EStatusRide.FINISHED)
-        throw new BadRequestException('It is not possible to change the status of a completed ride');
+        throw new BadRequestException('It is not possible to change the status of a completed ride.');
 
       const driver = await this.driverRepository.findOne({ where: { id: driverId } });
       if (!driver) throw new BadRequestException('Does not exists driver with id');
