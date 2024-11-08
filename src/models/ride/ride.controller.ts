@@ -10,7 +10,20 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 export class RideController {
   constructor(private readonly rideService: RideService) {}
 
-  @ApiOperation({ summary: 'create ride' })
+  @ApiOperation({
+    summary: 'create ride',
+    description: `
+
+    sample request to create a ride
+    POST /rides
+    body : {
+      "origin": "My Home",
+      "destination": "Ibirapuera Park",
+      "value": 50,00,
+      "passengerId": "d4c5593d-1c35-430c-bf64-ded0a548acbb"
+    }
+  `,
+  })
   @ApiResponse({
     status: 201,
     description: 'create ride successfully',
@@ -30,7 +43,14 @@ export class RideController {
     return await this.rideService.create(createRideDto);
   }
 
-  @ApiOperation({ summary: 'list ride by id' })
+  @ApiOperation({
+    summary: 'list ride by id',
+    description: `
+
+      sample request to list ride by id
+      GET /rides/d4c5593d-1c35-430c-bf64-ded0a548acbb
+    `,
+  })
   @ApiResponse({
     status: 200,
     description: 'list ride by id',
@@ -72,7 +92,6 @@ export class RideController {
   @ApiResponse({
     status: 204,
     description: 'create ride successfully',
-    type: RideShortResponseDTO,
   })
   @ApiResponse({
     status: 400,
