@@ -5,12 +5,23 @@ import { Driver } from './entities/driver.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Drivers')
-@Controller('driver')
+@Controller('drivers')
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}
 
-  @ApiOperation({ summary: 'Create a new driver with data in request.' })
-  @ApiResponse({ status: 201, description: 'driver created with success' })
+  @ApiOperation({
+    summary: 'Create a new driver with data in request.',
+    description: `
+    sample request to create a driver
+    POST /drivers
+    body : {
+      "name": "John Doe",
+      "phone": "32212015",
+      "car": 'Celta',
+    }
+    `,
+  })
+  @ApiResponse({ status: 201, description: 'driver created with success', type: Driver })
   @ApiResponse({
     status: 400,
     description: 'Bad Request. Validation errors or invalid data.',
@@ -24,8 +35,14 @@ export class DriverController {
     return this.driverService.create(createDriverDto);
   }
 
-  @ApiOperation({ summary: 'List all passenger' })
-  @ApiResponse({ status: 200, description: 'list all passenger with success' })
+  @ApiOperation({
+    summary: 'List all passenger',
+    description: `
+    sample request to list all drivers
+    GET /drivers
+    `,
+  })
+  @ApiResponse({ status: 200, description: 'list all passenger with success', type: [Driver] })
   @ApiResponse({
     status: 500,
     description: 'Internal Server Error. Something went wrong on the server.',
@@ -35,8 +52,14 @@ export class DriverController {
     return await this.driverService.findAll();
   }
 
-  @ApiOperation({ summary: 'List passenger by id' })
-  @ApiResponse({ status: 200, description: 'list Passenger by id' })
+  @ApiOperation({
+    summary: 'List passenger by id',
+    description: `
+    sample request to list driver by id
+    GET /drivers/63736a53-b5ce-40f1-9b89-1849a9a1be52
+    `,
+  })
+  @ApiResponse({ status: 200, description: 'list Passenger by id', type: Driver })
   @ApiResponse({
     status: 400,
     description: 'Bad Request. Validation errors or invalid data.',

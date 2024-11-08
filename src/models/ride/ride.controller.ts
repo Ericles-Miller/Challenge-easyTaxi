@@ -4,9 +4,10 @@ import { CreateRideDto } from './dto/create-ride.dto';
 import { UpdateRideDto } from './dto/update-ride.dto';
 import { RideFullResponseDTO } from './dto/ride-full-response.dto';
 import { RideShortResponseDTO } from './dto/ride-short-response.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@Controller('ride')
+@ApiTags('Rides')
+@Controller('rides')
 export class RideController {
   constructor(private readonly rideService: RideService) {}
 
