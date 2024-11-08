@@ -1,3 +1,73 @@
+## Descrição
+
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+
+## Instale as dependências do projeto
+
+```bash
+$ yarn install
+```
+
+## Obs:
+```text
+Defina as variáveis ​​de ambiente presentes no arquivo .env.example. Set as variáveis do banco de dados de acordo com o docker-compose.
+```
+
+## Comandos para compilar e executar o projeto
+
+```bash
+# execute o container com o comando abaixo
+$ docker compose up -d
+
+# development
+$ yarn run start
+
+# watch mode
+$ yarn run start:dev
+
+# production mode
+$ yarn run start:prod
+```
+
+## Excutar testes
+
+```bash
+# unit tests
+$ yarn run test
+
+# test coverage
+$ yarn run test:cov
+
+# test unique file
+$ yarn run test:watch path/test
+```
+
+## Origanização do projeto
+O projeto segue a arquitetura modular aplicando princípios SOLID. O projeto está organizado com as seguintes pastas:
+ - src
+    - models -- contém os modelos de passageiro, motorista e corrida. Neles encontramos:
+      - dtos
+      - entidades
+      - serviços (onde são validadas as regras de negócio do projeto)
+      - modulos (onde ocorre as injeções de dependência)
+      - controller (local para expor os endpoints da API)
+      - testes ( os testes estão entre essas pastas e arquivos )
+    - domain -- contém enumarators entidades que são extendidas e validações
+    - infra  -- contém a conexão com o banco de dados e migrations
+    - app.module -- arquivo principal que inicializa o projeto
+
+
+## Informações importantes:
+  - As migrations do projeto serão geradas de forma automática ao inicializar o projeto
+  - Você pode acessar os endpoints da aplicação através do endereço localhost:{port}/api
+  - Os endpoints do swagger só estaram disponíveis caso o projeto estiver com a variável de ambiente em desenvolvimento
+  - O banco de dados escolhido foi o PostgresSQL
+  - O projeto foi desenvolvido em Node usando o framework NestJs
+  - Foram feitos alguns endpoints de listagem de passageiros e motoristas para auxiliar na busca de dados(Como esses endpoints não são pedidos no teste, não foram feitos testes para eles.)
+
+
+
+
 ### Desafio Técnico: API de Corridas de Táxi
 
 ## Objetivo
