@@ -11,6 +11,7 @@ const passenger: Passenger = {
   name: 'John Doe',
   createdAt: new Date(),
   phone: '5519991928157',
+  ride: [],
 };
 
 const mockService = {

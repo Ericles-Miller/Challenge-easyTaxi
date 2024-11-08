@@ -24,7 +24,7 @@ export class RideShortResponseDTO extends OmitType(Ride, ['createdAt', 'passenge
 
   @Expose()
   @ApiProperty()
-  @Transform(({ obj }) => obj.passenger?.name)
+  @Transform(({ obj }) => obj.getNamePassenger())
   passenger: string;
 
   @Expose()
