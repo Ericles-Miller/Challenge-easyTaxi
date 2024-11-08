@@ -9,6 +9,7 @@ import { Driver } from '../driver/entities/driver.entity';
 import { RideFullResponseDTO } from './dto/ride-full-response.dto';
 import { RideShortResponseDTO } from './dto/ride-short-response.dto';
 import { plainToInstance } from 'class-transformer';
+import { EStatusRide } from 'src/domain/enums/status-rides.enum';
 
 @Injectable()
 export class RideService {
@@ -46,10 +47,6 @@ export class RideService {
     }
   }
 
-  findAll() {
-    return `This action returns all ride`;
-  }
-
   async findOne(id: string): Promise<RideFullResponseDTO> {
     try {
       const ride = await this.rideRepository.findOne({ where: { id }, relations: ['passenger', 'driver'] });
@@ -61,15 +58,45 @@ export class RideService {
     } catch (error) {
       if (error instanceof BadRequestException) throw error;
 
-      throw new InternalServerErrorException('Unexpected server error to list read');
+      throw new InternalServerErrorException('Unexpected server error to list ride');
     }
   }
 
-  update(id: number, updateRideDto: UpdateRideDto) {
-    return `This action updates a #${id} ride`;
-  }
+  async update(id: string, { driverId, status }: UpdateRideDto): Promise<void> {
+    try {
+      const ride = await this.rideRepository.findOne({
+        where: { id },
+        relations: ['passenger', 'driver'],
+      });
 
-  remove(id: number) {
-    return `This action removes a #${id} ride`;
+      if (!ride) throw new BadRequestException('Does not exists ride with id');
+
+      if (ride.driver) {
+        if (ride.driver.id !== driverId) throw new BadRequestException('This ride already has a driver');
+      }
+
+      if (ride.status === EStatusRide.FINISHED)
+        throw new BadRequestException('It is not possible to change the status of a completed ride');
+
+      const driver = await this.driverRepository.findOne({ where: { id: driverId } });
+      if (!driver) throw new BadRequestException('Does not exists driver with id');
+
+      if (status === EStatusRide.IN_PROGRESS && ride.status === EStatusRide.WAIT) {
+        ride.setStatusRide(status);
+        ride.setStartedAt();
+        ride.setDriverId(driverId);
+      } else if (status === EStatusRide.FINISHED && ride.status === EStatusRide.IN_PROGRESS) {
+        ride.setStatusRide(status);
+        ride.setFinishedAt();
+      } else {
+        throw new BadRequestException('It is not possible to change the race status from await to finished');
+      }
+
+      await this.rideRepository.update(id, ride);
+    } catch (error) {
+      if (error instanceof BadRequestException) throw error;
+
+      throw new InternalServerErrorException('Unexpected server error to update ride');
+    }
   }
 }

@@ -15,11 +15,11 @@ export class RideFullResponseDTO extends OmitType(RideShortResponseDTO, [
 
   @Expose()
   @ApiProperty()
-  @Transform(({ value }) => format(value, 'dd/MM/yyyy'))
+  @Transform(({ value }) => (value ? format(value, 'dd/MM/yyyy - HH:mm') : null))
   startedAt?: string;
 
   @Expose()
   @ApiProperty()
-  @Transform(({ value }) => format(value, 'dd/MM/yyyy'))
+  @Transform(({ value }) => (value ? format(value, 'dd/MM/yyyy - HH:mm') : null))
   finishedAt?: string;
 }

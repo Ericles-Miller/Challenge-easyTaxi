@@ -11,7 +11,7 @@ export class RideShortResponseDTO extends OmitType(Ride, ['createdAt', 'passenge
 
   @Expose()
   @ApiProperty()
-  @Transform(({ value }) => format(value, 'dd/MM/yyyy'))
+  @Transform(({ value }) => (value ? format(value, 'dd/MM/yyyy - HH:mm') : null))
   createdAt: string;
 
   @Expose()
