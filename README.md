@@ -12,10 +12,10 @@
     - Passageiro: id, nome, telefone --ok
     - Motorista: id, nome, carro, telefone --ok
     - Corrida: id, passageiro_id, motorista_id, status, origem, destino, data_hora_solicitacao, data_hora_inicio, data_hora_fim, valor -- ok
- - Sinta-se à vontade para adicionar outros campos, caso considere necessário.
+ - Sinta-se à vontade para adicionar outros campos, caso considere necessário. -- ok
 
  - Critérios de Avaliação
-    - Funcionalidade: A API atende a todos os requisitos?
+    - Funcionalidade: A API atende a todos os requisitos? -- ok
     - Estrutura e Organização do Código: A solução é clara e fácil de entender? --ok
     - Qualidade do Código: Uso correto de boas práticas e organização. -- ok
     - Persistência e Modelagem de Dados: O esquema do banco de dados atende aos requisitos da API? -- ok
@@ -25,7 +25,7 @@
 
 ## Observação:
  - A API funcionará recebendo os dados no formato JSON e vai devolver o output no formato JSON. --ok
- - Diferencial: Implementação de testes automatizados para validação das funcionalidades.
+ - Diferencial: Implementação de testes automatizados para validação das funcionalidades. -- ok
 
 
 
