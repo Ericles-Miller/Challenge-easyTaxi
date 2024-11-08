@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { dataSourceOptions } from './infra/database/database.providers';
 import { PassengerModule } from './models/passenger/passenger.module';
 import { DriverModule } from './models/driver/driver.module';
+import { RideModule } from './models/ride/ride.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { DriverModule } from './models/driver/driver.module';
     TypeOrmModule.forRoot(dataSourceOptions),
     PassengerModule,
     DriverModule,
+    RideModule,
   ],
   controllers: [],
   providers: [],
