@@ -12,6 +12,7 @@ const driver: Driver = {
   createdAt: new Date(),
   phone: '5519991928157',
   car: 'Celta',
+  ride: [],
 };
 
 describe('DriverService', () => {
@@ -72,6 +73,7 @@ describe('DriverService', () => {
         createdAt: new Date(),
         phone: '5519991928157',
         car: 'Celta',
+        ride: [],
       });
 
       await expect(service.create(data)).rejects.toThrow(
