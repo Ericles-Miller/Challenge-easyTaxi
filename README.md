@@ -5,7 +5,7 @@
 ## Instale as dependências do projeto
 
 ```bash
-$ yarn install
+$ yarn 
 ```
 
 ## Obs:
