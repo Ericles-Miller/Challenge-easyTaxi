@@ -16,7 +16,7 @@ export class CreateTableRide1730945527302 implements MigrationInterface {
           {
             name: 'status',
             type: 'enum',
-            enum: ['WAIT', 'IN_PROGRESS', 'FINISHED', 'CANCELLED'],
+            enum: ['WAIT', 'IN_PROGRESS', 'FINISHED'],
             enumName: 'ride_status_enum',
             default: `'WAIT'`,
           },
