@@ -12,6 +12,7 @@ const passenger: Passenger = {
   name: 'John Doe',
   createdAt: new Date(),
   phone: '5519991928157',
+  ride: [],
 };
 
 describe('PassengerService', () => {
@@ -65,10 +66,11 @@ describe('PassengerService', () => {
       };
 
       jest.spyOn(repository, 'findOne').mockResolvedValue({
-        id: uuid(),
+        id: 'd4c5593d-1c35-430c-bf64-ded0a548acbb',
         name: 'other name',
         createdAt: new Date(),
         phone: '5519991928157',
+        ride: [],
       });
 
       await expect(service.create(data)).rejects.toThrow(

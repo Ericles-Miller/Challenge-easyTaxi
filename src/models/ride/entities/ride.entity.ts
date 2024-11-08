@@ -63,7 +63,7 @@ export class Ride extends BaseEntity {
     this.driverId = driverId;
   }
 
-  getNamePassenger(name: string): void {
-    this.passengerId = name;
+  getNamePassenger(): string | null {
+    return this.passenger ? this.passenger.name : null;
   }
 }

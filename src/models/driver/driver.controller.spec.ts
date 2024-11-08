@@ -11,6 +11,7 @@ const driver: Driver = {
   createdAt: new Date(),
   phone: '5519991928157',
   car: 'Celta',
+  ride: [],
 };
 
 const mockService = {
