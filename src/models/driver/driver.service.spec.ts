@@ -42,7 +42,7 @@ describe('DriverService', () => {
     expect(repository).toBeDefined();
   });
 
-  describe('suit test to create passengers', () => {
+  describe('suit tests to create passengers', () => {
     it('should be create a new passenger successfully', async () => {
       const data: CreateDriverDto = {
         name: 'John Doe',

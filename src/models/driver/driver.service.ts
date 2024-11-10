@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { Driver } from './entities/driver.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -32,16 +37,26 @@ export class DriverService {
   }
 
   async findAll(): Promise<Driver[]> {
-    return await this.repository.find();
+    try {
+      return await this.repository.find();
+    } catch {
+      throw new InternalServerErrorException('Internal server error to list all drivers');
+    }
   }
 
   async findOne(id: string): Promise<Driver> {
-    const driver = await this.repository.findOne({
-      where: { id },
-    });
+    try {
+      const driver = await this.repository.findOne({
+        where: { id },
+      });
 
-    if (!driver) throw new BadRequestException('Does not exists driver with id');
+      if (!driver) throw new NotFoundException('Does not exists driver with id');
 
-    return driver;
+      return driver;
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+
+      throw new InternalServerErrorException('Internal server error to list drivers by id');
+    }
   }
 }

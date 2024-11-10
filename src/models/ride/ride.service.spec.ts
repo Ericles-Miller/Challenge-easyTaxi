@@ -8,7 +8,7 @@ import { Passenger } from '../passenger/entities/passenger.entity';
 import { CreateRideDto } from './dto/create-ride.dto';
 import { RideShortResponseDTO } from './dto/ride-short-response.dto';
 import { format } from 'date-fns';
-import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { RideFullResponseDTO } from './dto/ride-full-response.dto';
 import { UpdateRideDto } from './dto/update-ride.dto';
 import { EStatusRide } from 'src/domain/enums/status-rides.enum';
@@ -102,7 +102,7 @@ describe('RideService', () => {
     expect(driverRepository).toBeDefined();
   });
 
-  describe('suit test to create a new ride', () => {
+  describe('suit tests to create a new ride', () => {
     it('should be create a new ride successfully', async () => {
       const data: CreateRideDto = {
         destination: 'Ibirapuera Park',
@@ -120,7 +120,7 @@ describe('RideService', () => {
       expect(result).toEqual(responseRide);
     });
 
-    it('should throw BadRequestException if passenger id does not exists', async () => {
+    it('should throw NotFoundException if passenger id does not exists', async () => {
       const data: CreateRideDto = {
         destination: 'Ibirapuera Park',
         origin: 'My Home',
@@ -131,7 +131,7 @@ describe('RideService', () => {
       jest.spyOn(passengerRepository, 'findOne').mockResolvedValue(null);
 
       await expect(service.create(data)).rejects.toThrow(
-        new BadRequestException('Passenger id does not exists.'),
+        new NotFoundException('Passenger id does not exists.'),
       );
     });
 
@@ -159,11 +159,11 @@ describe('RideService', () => {
       expect(result).toEqual(fullResponse);
     });
 
-    it('shoul throw BadRequestException if ride id does not exists', async () => {
+    it('should throw NotFoundException if ride id does not exists', async () => {
       jest.spyOn(rideRepository, 'findOne').mockResolvedValue(null);
 
       await expect(service.findOne('aba12fea-c6de-4377-840e-b78a1e5ec6fd')).rejects.toThrow(
-        new BadRequestException('id of ride is incorrect.'),
+        new NotFoundException('Does not exists ride with id.'),
       );
     });
 
@@ -217,7 +217,7 @@ describe('RideService', () => {
       expect(data.status).toBe(EStatusRide.FINISHED);
     });
 
-    it('should throw BadRequestException if ride id does not exists', async () => {
+    it('should throw NotFoundException if ride id does not exists', async () => {
       const data: UpdateRideDto = {
         driverId: 'aba12fea-c6de-4377-840e-b78a1e5ec6fd',
         status: EStatusRide.FINISHED,
@@ -226,7 +226,7 @@ describe('RideService', () => {
       jest.spyOn(rideRepository, 'findOne').mockResolvedValue(null);
 
       await expect(service.update('aba12fea-c6de-4377-840e-b78a1e5ec6fd', data)).rejects.toThrow(
-        new BadRequestException('Does not exists ride with id.'),
+        new NotFoundException('Does not exists ride with id.'),
       );
     });
 

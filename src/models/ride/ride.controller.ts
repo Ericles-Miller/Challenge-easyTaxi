@@ -31,7 +31,7 @@ export class RideController {
     type: RideShortResponseDTO,
   })
   @ApiResponse({
-    status: 400,
+    status: 404,
     description: 'Erro de requisição. Erros de validação ou dados inválidos.',
   })
   @ApiResponse({
@@ -54,16 +54,16 @@ export class RideController {
   })
   @ApiResponse({
     status: 200,
-    description: 'list ride by id',
+    description: 'list ride by id successfully',
     type: RideFullResponseDTO,
   })
   @ApiResponse({
-    status: 400,
-    description: 'Erro de requisição. Erros de validação ou dados inválidos.',
+    status: 404,
+    description: 'Not Found Request. Validation errors or invalid data.',
   })
   @ApiResponse({
     status: 500,
-    description: 'Erro Interno do Servidor. Algo deu errado no servidor.',
+    description: 'Internal Server Error. Something went wrong on the server.',
   })
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<RideFullResponseDTO> {
@@ -92,15 +92,19 @@ export class RideController {
   })
   @ApiResponse({
     status: 204,
-    description: 'create ride successfully',
+    description: 'update ride successfully',
   })
   @ApiResponse({
     status: 400,
-    description: 'Erro de requisição. Erros de validação ou dados inválidos.',
+    description: 'Bad Request. Validation errors or invalid data.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request. Validation errors or invalid data.',
   })
   @ApiResponse({
     status: 500,
-    description: 'Erro Interno do Servidor. Algo deu errado no servidor.',
+    description: 'Internal Server Error. Something went wrong on the server.',
   })
   @Patch(':id')
   @HttpCode(204)

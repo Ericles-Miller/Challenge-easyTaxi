@@ -14,7 +14,7 @@ export class DriverController {
     description: `
     sample request to create a driver
     POST /drivers
-    body : {
+    example body : {
       "name": "John Doe",
       "phone": "32212015",
       "car": 'Celta',
@@ -61,8 +61,8 @@ export class DriverController {
   })
   @ApiResponse({ status: 200, description: 'list Passenger by id', type: Driver })
   @ApiResponse({
-    status: 400,
-    description: 'Bad Request. Validation errors or invalid data.',
+    status: 404,
+    description: 'Not Found Request. Validation errors or invalid data.',
   })
   @ApiResponse({
     status: 500,

@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateRideDto } from './dto/create-ride.dto';
 import { UpdateRideDto } from './dto/update-ride.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -29,7 +34,7 @@ export class RideService {
       const passengerExists = await this.passengerRepository.findOne({
         where: { id: passengerId },
       });
-      if (!passengerExists) throw new BadRequestException('Passenger id does not exists.');
+      if (!passengerExists) throw new NotFoundException('Passenger id does not exists.');
 
       let ride = new Ride(origin, destination, value, passengerId);
       ride.passenger = passengerExists;
@@ -41,7 +46,7 @@ export class RideService {
 
       return response;
     } catch (error) {
-      if (error instanceof BadRequestException) throw error;
+      if (error instanceof NotFoundException) throw error;
 
       throw new InternalServerErrorException('Unexpected server error to create ride.');
     }
@@ -50,13 +55,13 @@ export class RideService {
   async findOne(id: string): Promise<RideFullResponseDTO> {
     try {
       const ride = await this.rideRepository.findOne({ where: { id }, relations: ['passenger', 'driver'] });
-      if (!ride) throw new BadRequestException('id of ride is incorrect.');
+      if (!ride) throw new NotFoundException('Does not exists ride with id.');
 
       return plainToInstance(RideFullResponseDTO, ride, {
         excludeExtraneousValues: true,
       });
     } catch (error) {
-      if (error instanceof BadRequestException) throw error;
+      if (error instanceof NotFoundException) throw error;
 
       throw new InternalServerErrorException('Unexpected server error to list ride');
     }
@@ -69,7 +74,7 @@ export class RideService {
         relations: ['passenger', 'driver'],
       });
 
-      if (!ride) throw new BadRequestException('Does not exists ride with id.');
+      if (!ride) throw new NotFoundException('Does not exists ride with id.');
 
       if (ride.driver) {
         if (ride.driver.id !== driverId) throw new BadRequestException('This ride already has a driver.');
@@ -79,7 +84,7 @@ export class RideService {
         throw new BadRequestException('It is not possible to change the status of a completed ride.');
 
       const driver = await this.driverRepository.findOne({ where: { id: driverId } });
-      if (!driver) throw new BadRequestException('Does not exists driver with id');
+      if (!driver) throw new NotFoundException('Does not exists driver with id');
 
       if (status === EStatusRide.IN_PROGRESS && ride.status === EStatusRide.WAIT) {
         ride.setStatusRide(status);
@@ -94,7 +99,7 @@ export class RideService {
 
       await this.rideRepository.update(id, ride);
     } catch (error) {
-      if (error instanceof BadRequestException) throw error;
+      if (error instanceof BadRequestException || error instanceof NotFoundException) throw error;
 
       throw new InternalServerErrorException('Unexpected server error to update ride');
     }
