@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, HttpCode } from '@nestjs/common';
 import { DriverService } from './driver.service';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { Driver } from './entities/driver.entity';
@@ -31,6 +31,7 @@ export class DriverController {
     description: 'Internal Server Error. Something went wrong on the server.',
   })
   @Post()
+  @HttpCode(201)
   create(@Body() createDriverDto: CreateDriverDto) {
     return this.driverService.create(createDriverDto);
   }
@@ -47,6 +48,7 @@ export class DriverController {
     status: 500,
     description: 'Internal Server Error. Something went wrong on the server.',
   })
+  @HttpCode(200)
   @Get()
   async findAll(): Promise<Driver[]> {
     return await this.driverService.findAll();
@@ -69,6 +71,7 @@ export class DriverController {
     description: 'Internal Server Error. Something went wrong on the server.',
   })
   @Get(':id')
+  @HttpCode(200)
   async findOne(@Param('id') id: string): Promise<Driver> {
     return await this.driverService.findOne(id);
   }

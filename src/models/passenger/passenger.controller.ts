@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, HttpCode } from '@nestjs/common';
 import { PassengerService } from './passenger.service';
 import { CreatePassengerDto } from './dto/create-passenger.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -30,6 +30,7 @@ export class PassengerController {
     description: 'Internal Server Error. Something went wrong on the server.',
   })
   @Post()
+  @HttpCode(201)
   async create(@Body() createPassengerDto: CreatePassengerDto): Promise<Passenger> {
     return await this.passengerService.create(createPassengerDto);
   }
@@ -46,6 +47,7 @@ export class PassengerController {
     status: 500,
     description: 'Internal Server Error. Something went wrong on the server.',
   })
+  @HttpCode(200)
   @Get()
   async findAll(): Promise<Passenger[]> {
     return await this.passengerService.findAll();
@@ -67,6 +69,7 @@ export class PassengerController {
     status: 500,
     description: 'Internal Server Error. Something went wrong on the server.',
   })
+  @HttpCode(200)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Passenger> {
     return await this.passengerService.findOne(id);
