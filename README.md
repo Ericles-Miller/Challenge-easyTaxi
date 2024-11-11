@@ -2,7 +2,11 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+<<<<<<< HEAD
+## Tenha instalado o node verão 20.12 em sua máquina
+=======
 Para executar em modo de desenvolvimento:
+>>>>>>> main
 
 ## Instale as dependências do projeto
 

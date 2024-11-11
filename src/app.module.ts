@@ -5,6 +5,7 @@ import { dataSourceOptions } from './database/database.providers';
 import { PassengerModule } from './passenger/passenger.module';
 import { DriverModule } from './driver/driver.module';
 import { RideModule } from './ride/ride.module';
+import { PhoneValidatorModule } from './phone-validator/phone-validator.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { RideModule } from './ride/ride.module';
     PassengerModule,
     DriverModule,
     RideModule,
+    PhoneValidatorModule,
   ],
   controllers: [],
   providers: [],

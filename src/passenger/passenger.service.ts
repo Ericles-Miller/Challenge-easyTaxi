@@ -8,20 +8,20 @@ import { CreatePassengerDto } from './dto/create-passenger.dto';
 import { Passenger } from './entities/passenger.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PhoneValidatorService } from 'src/phone-validator/phone-validator.service';
 
 @Injectable()
 export class PassengerService {
   constructor(
     @InjectRepository(Passenger)
     private readonly repository: Repository<Passenger>,
+
+    private readonly phoneValidator: PhoneValidatorService,
   ) {}
 
   async create({ name, phone }: CreatePassengerDto): Promise<Passenger> {
     try {
-      const passengerExists = await this.repository.findOne({
-        where: { phone },
-      });
-      if (passengerExists) throw new BadRequestException('The phone already exists to other passenger.');
+      await this.phoneValidator.validateUniquePhone(phone);
 
       let passenger = new Passenger(name, phone);
 
@@ -56,5 +56,10 @@ export class PassengerService {
 
       throw new InternalServerErrorException('Internal server erro to list passenger by id');
     }
+  }
+
+  async findByPhone(phone: string): Promise<boolean> {
+    const phoneExists = await this.repository.findOne({ where: { phone } });
+    return phoneExists ? true : false;
   }
 }

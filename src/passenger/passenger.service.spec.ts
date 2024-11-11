@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreatePassengerDto } from './dto/create-passenger.dto';
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { PhoneValidatorService } from 'src/phone-validator/phone-validator.service';
 
 const passenger: Passenger = {
   id: uuid(),
@@ -18,6 +19,7 @@ const passenger: Passenger = {
 describe('PassengerService', () => {
   let service: PassengerService;
   let repository: Repository<Passenger>;
+  let phoneValidationService: PhoneValidatorService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -30,16 +32,24 @@ describe('PassengerService', () => {
             findOne: jest.fn(),
           },
         },
+        {
+          provide: PhoneValidatorService,
+          useValue: {
+            validateUniquePhone: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     service = module.get<PassengerService>(PassengerService);
     repository = module.get<Repository<Passenger>>(getRepositoryToken(Passenger));
+    phoneValidationService = module.get(PhoneValidatorService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
     expect(repository).toBeDefined();
+    expect(phoneValidationService).toBeDefined();
   });
 
   describe('suit tests to create passengers', () => {
@@ -49,11 +59,11 @@ describe('PassengerService', () => {
         phone: '5519991928157',
       };
 
-      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+      jest.spyOn(phoneValidationService, 'validateUniquePhone');
       jest.spyOn(repository, 'save').mockResolvedValue(passenger);
       const result = await service.create(data);
 
-      expect(repository.findOne).toHaveBeenCalledTimes(1);
+      expect(phoneValidationService.validateUniquePhone).toHaveBeenCalledTimes(1);
       expect(repository.save).toHaveBeenCalledTimes(1);
 
       expect(result).toEqual(passenger);
@@ -65,13 +75,9 @@ describe('PassengerService', () => {
         phone: '5519991928157',
       };
 
-      jest.spyOn(repository, 'findOne').mockResolvedValue({
-        id: 'd4c5593d-1c35-430c-bf64-ded0a548acbb',
-        name: 'other name',
-        createdAt: new Date(),
-        phone: '5519991928157',
-        ride: [],
-      });
+      jest
+        .spyOn(phoneValidationService, 'validateUniquePhone')
+        .mockRejectedValue(new BadRequestException('The phone already exists to other passenger.'));
 
       await expect(service.create(data)).rejects.toThrow(
         new BadRequestException('The phone already exists to other passenger.'),
@@ -79,7 +85,8 @@ describe('PassengerService', () => {
     });
 
     it('should throw InternalServerErrorException on unexpected error', async () => {
-      jest.spyOn(repository, 'findOne').mockRejectedValue(new Error('Database failure'));
+      jest.spyOn(repository, 'save').mockRejectedValue(new Error('Database failure'));
+      jest.spyOn(phoneValidationService, 'validateUniquePhone').mockRejectedValue(new Error());
 
       const createPassengerDto = { name: 'John Doe', phone: '123456789' };
 
