@@ -21,7 +21,7 @@ export class PassengerService {
       const passengerExists = await this.repository.findOne({
         where: { phone },
       });
-      if (passengerExists) throw new BadRequestException('The phone already exists to other passenger.');
+      if (passengerExists) throw new BadRequestException('The phone already exists to other user.');
 
       let passenger = new Passenger(name, phone);
 
@@ -56,5 +56,10 @@ export class PassengerService {
 
       throw new InternalServerErrorException('Internal server erro to list passenger by id');
     }
+  }
+
+  async findByPhone(phone: string): Promise<boolean> {
+    const phoneExists = await this.repository.findOne({ where: { phone } });
+    return phoneExists ? true : false;
   }
 }

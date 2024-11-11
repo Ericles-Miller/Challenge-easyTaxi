@@ -14,6 +14,8 @@ export class DriverService {
   constructor(
     @InjectRepository(Driver)
     private readonly repository: Repository<Driver>,
+
+    //private readonly passenger: PassengerService,
   ) {}
 
   async create({ car, name, phone }: CreateDriverDto): Promise<Driver> {
@@ -23,6 +25,9 @@ export class DriverService {
       });
 
       if (driverExists) throw new BadRequestException('This phone already exists to other user.');
+
+      //const phoneExists = await this.passenger.findPhone(phone);
+      //if (phoneExists) throw new BadRequestException('This phone already exists to other user.');
 
       let driver = new Driver(name, phone, car);
 
@@ -58,5 +63,10 @@ export class DriverService {
 
       throw new InternalServerErrorException('Internal server error to list drivers by id');
     }
+  }
+
+  async findByPhone(phone: string): Promise<boolean> {
+    const phoneExists = await this.repository.findOne({ where: { phone } });
+    return phoneExists ? true : false;
   }
 }
