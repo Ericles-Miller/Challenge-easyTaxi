@@ -15,7 +15,7 @@ async function bootstrap() {
     }),
   );
 
-  if (process.env.NODE_ENV === 'Development') {
+  if (process.env.NODE_ENV === 'Development' || process.env.NODE_ENV === 'development') {
     const config = new DocumentBuilder().setTitle('Taxi Racing API').setVersion('1.0').build();
 
     const document = SwaggerModule.createDocument(app, config);

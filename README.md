@@ -2,6 +2,20 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+Para executar em modo de desenvolvimento:
+
+bash
+Copiar código
+docker-compose up --build app-dev
+Para executar em modo de produção:
+
+bash
+Copiar código
+docker-compose up --build app
+
+
+
+
 ## Instale as dependências do projeto
 
 ```bash
