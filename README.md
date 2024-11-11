@@ -12,7 +12,7 @@ $ yarn
 
 ## Obs:
 ```text
-Defina as variáveis ​​de ambiente presentes no arquivo .env.example. Set as variáveis do banco de dados de acordo com o docker-compose.
+Defina as variáveis ​​de ambiente presentes no arquivo .env.example. Set as variáveis do banco de dados de acordo com o arquivo docker-compose.
 ```
 
 ## Comandos para compilar e executar o projeto
@@ -54,8 +54,9 @@ O projeto segue a arquitetura modular aplicando princípios SOLID. O projeto est
       - modulos (onde ocorre as injeções de dependência)
       - controller (local para expor os endpoints da API)
       - testes ( os testes estão entre essas pastas e arquivos )
-    - domain -- contém enumarators entidades que são extendidas e validações
-    - infra  -- contém a conexão com o banco de dados e migrations
+      - Enumarators
+      - validações personalizadas
+    - alguns arquivos de auxílio no projeto
     - app.module -- arquivo principal que inicializa o projeto
 
 
