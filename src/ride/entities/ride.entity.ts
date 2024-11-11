@@ -1,7 +1,7 @@
-import { EStatusRide } from 'src/domain/enums/status-rides.enum';
-import { BaseEntity } from 'src/domain/generalEntities/base-entity';
-import { Driver } from 'src/models/driver/entities/driver.entity';
-import { Passenger } from 'src/models/passenger/entities/passenger.entity';
+import { EStatusRide } from 'src/ride/enums/status-rides.enum';
+import { BaseEntity } from 'src/base-entity';
+import { Driver } from 'src/driver/entities/driver.entity';
+import { Passenger } from 'src/passenger/entities/passenger.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity({ name: 'ride' })

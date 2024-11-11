@@ -1,6 +1,6 @@
-import { Driver } from 'src/models/driver/entities/driver.entity';
-import { Passenger } from 'src/models/passenger/entities/passenger.entity';
-import { Ride } from 'src/models/ride/entities/ride.entity';
+import { Driver } from 'src/driver/entities/driver.entity';
+import { Passenger } from 'src/passenger/entities/passenger.entity';
+import { Ride } from 'src/ride/entities/ride.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 export const dataSourceOptions: DataSourceOptions = {

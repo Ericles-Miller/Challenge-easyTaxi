@@ -4,7 +4,7 @@ import { RideService } from './ride.service';
 import { CreateRideDto } from './dto/create-ride.dto';
 import { RideShortResponseDTO } from './dto/ride-short-response.dto';
 import { format } from 'date-fns';
-import { EStatusRide } from 'src/domain/enums/status-rides.enum';
+import { EStatusRide } from 'src/ride/enums/status-rides.enum';
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { RideFullResponseDTO } from './dto/ride-full-response.dto';
 import { UpdateRideDto } from './dto/update-ride.dto';

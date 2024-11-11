@@ -11,13 +11,15 @@ import { format } from 'date-fns';
 import { BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { RideFullResponseDTO } from './dto/ride-full-response.dto';
 import { UpdateRideDto } from './dto/update-ride.dto';
-import { EStatusRide } from 'src/domain/enums/status-rides.enum';
+import { EStatusRide } from 'src/ride/enums/status-rides.enum';
+import { DriverService } from 'src/driver/driver.service';
+import { PassengerService } from 'src/passenger/passenger.service';
 
 describe('RideService', () => {
   let service: RideService;
   let rideRepository: Repository<Ride>;
-  let driverRepository: Repository<Driver>;
-  let passengerRepository: Repository<Passenger>;
+  let driverService: DriverService;
+  let passengerService: PassengerService;
 
   const ride = new Ride('My Home', 'Ibirapuera Park', 50, 'aba12fea-c6de-4377-840e-b78a1e5ec6fd');
   const passenger: Passenger = {
@@ -73,13 +75,13 @@ describe('RideService', () => {
           },
         },
         {
-          provide: getRepositoryToken(Driver),
+          provide: PassengerService,
           useValue: {
             findOne: jest.fn(),
           },
         },
         {
-          provide: getRepositoryToken(Passenger),
+          provide: DriverService,
           useValue: {
             findOne: jest.fn(),
           },
@@ -88,9 +90,10 @@ describe('RideService', () => {
     }).compile();
 
     service = module.get<RideService>(RideService);
-    driverRepository = module.get<Repository<Driver>>(getRepositoryToken(Driver));
-    passengerRepository = module.get<Repository<Passenger>>(getRepositoryToken(Passenger));
     rideRepository = module.get<Repository<Ride>>(getRepositoryToken(Ride));
+
+    driverService = module.get<DriverService>(DriverService);
+    passengerService = module.get<PassengerService>(PassengerService);
 
     jest.clearAllMocks();
   });
@@ -98,8 +101,8 @@ describe('RideService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
     expect(rideRepository).toBeDefined();
-    expect(passengerRepository).toBeDefined();
-    expect(driverRepository).toBeDefined();
+    expect(passengerService).toBeDefined();
+    expect(driverService).toBeDefined();
   });
 
   describe('suit tests to create a new ride', () => {
@@ -111,11 +114,11 @@ describe('RideService', () => {
         value: 50,
       };
 
-      jest.spyOn(passengerRepository, 'findOne').mockResolvedValue(passenger);
+      jest.spyOn(passengerService, 'findOne').mockResolvedValue(passenger);
       jest.spyOn(rideRepository, 'save').mockResolvedValue(ride);
 
       const result = await service.create(data);
-      expect(passengerRepository.findOne).toHaveBeenCalledTimes(1);
+      expect(passengerService.findOne).toHaveBeenCalledTimes(1);
       expect(rideRepository.save).toHaveBeenCalledTimes(1);
       expect(result).toEqual(responseRide);
     });
@@ -128,7 +131,7 @@ describe('RideService', () => {
         value: 50,
       };
 
-      jest.spyOn(passengerRepository, 'findOne').mockResolvedValue(null);
+      jest.spyOn(passengerService, 'findOne').mockResolvedValue(null);
 
       await expect(service.create(data)).rejects.toThrow(
         new NotFoundException('Passenger id does not exists.'),
@@ -142,7 +145,7 @@ describe('RideService', () => {
         passengerId: 'aba12fea-c6de-4377-840e-b78a1e5ec6fd',
         value: 50,
       };
-      jest.spyOn(passengerRepository, 'findOne').mockResolvedValue(passenger);
+      jest.spyOn(passengerService, 'findOne').mockResolvedValue(passenger);
       jest
         .spyOn(rideRepository, 'save')
         .mockRejectedValue(new InternalServerErrorException('Database failure'));
@@ -152,7 +155,7 @@ describe('RideService', () => {
   });
 
   describe('Suit test to list Ride By Id', () => {
-    it('shoul list ride by id Successfully', async () => {
+    it('should list ride by id Successfully', async () => {
       jest.spyOn(rideRepository, 'findOne').mockResolvedValue(ride);
 
       const result = await service.findOne('aba12fea-c6de-4377-840e-b78a1e5ec6fd');
@@ -188,7 +191,7 @@ describe('RideService', () => {
       const rideUpdate = new Ride('My Home', 'Ibirapuera Park', 50, 'aba12fea-c6de-4377-840e-b78a1e5ec6fd');
 
       jest.spyOn(rideRepository, 'findOne').mockResolvedValue(rideUpdate);
-      jest.spyOn(driverRepository, 'findOne').mockResolvedValue(drive);
+      jest.spyOn(driverService, 'findOne').mockResolvedValue(drive);
       jest.spyOn(rideRepository, 'update');
 
       await service.update('aba12fea-c6de-4377-840e-b78a1e5ec6fd', data);
@@ -208,7 +211,7 @@ describe('RideService', () => {
       rideUpdate.status = EStatusRide.IN_PROGRESS;
 
       jest.spyOn(rideRepository, 'findOne').mockResolvedValue(rideUpdate);
-      jest.spyOn(driverRepository, 'findOne').mockResolvedValue(drive);
+      jest.spyOn(driverService, 'findOne').mockResolvedValue(drive);
       jest.spyOn(rideRepository, 'update');
 
       await service.update('aba12fea-c6de-4377-840e-b78a1e5ec6fd', data);
@@ -254,7 +257,7 @@ describe('RideService', () => {
       rideUpdate.status = EStatusRide.FINISHED;
 
       jest.spyOn(rideRepository, 'findOne').mockResolvedValue(rideUpdate);
-      jest.spyOn(driverRepository, 'findOne').mockResolvedValue(drive);
+      jest.spyOn(driverService, 'findOne').mockResolvedValue(drive);
 
       await expect(service.update('aba12fea-c6de-4377-840e-b78a1e5ec6fd', data)).rejects.toThrow(
         new BadRequestException('It is not possible to change the status of a completed ride.'),

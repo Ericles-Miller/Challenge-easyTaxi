@@ -1,7 +1,7 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Ride } from '../entities/ride.entity';
 import { Expose, Transform } from 'class-transformer';
-import { EStatusRide } from 'src/domain/enums/status-rides.enum';
+import { EStatusRide } from 'src/ride/enums/status-rides.enum';
 import { format } from 'date-fns';
 
 export class RideShortResponseDTO extends OmitType(Ride, ['createdAt', 'passenger', 'status']) {

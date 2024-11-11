@@ -4,7 +4,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { EStatusRide } from '../enums/status-rides.enum';
+import { EStatusRide } from '../status-rides.enum';
 
 function enumValidator(status: EStatusRide): boolean {
   if (status === EStatusRide.WAIT) return false;

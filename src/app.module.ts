@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { dataSourceOptions } from './infra/database/database.providers';
-import { PassengerModule } from './models/passenger/passenger.module';
-import { DriverModule } from './models/driver/driver.module';
-import { RideModule } from './models/ride/ride.module';
+import { dataSourceOptions } from './database/database.providers';
+import { PassengerModule } from './passenger/passenger.module';
+import { DriverModule } from './driver/driver.module';
+import { RideModule } from './ride/ride.module';
 
 @Module({
   imports: [

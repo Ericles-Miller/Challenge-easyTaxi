@@ -9,12 +9,12 @@ import { UpdateRideDto } from './dto/update-ride.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Ride } from './entities/ride.entity';
 import { Repository } from 'typeorm';
-import { Passenger } from '../passenger/entities/passenger.entity';
-import { Driver } from '../driver/entities/driver.entity';
 import { RideFullResponseDTO } from './dto/ride-full-response.dto';
 import { RideShortResponseDTO } from './dto/ride-short-response.dto';
 import { plainToInstance } from 'class-transformer';
-import { EStatusRide } from 'src/domain/enums/status-rides.enum';
+import { EStatusRide } from 'src/ride/enums/status-rides.enum';
+import { PassengerService } from 'src/passenger/passenger.service';
+import { DriverService } from 'src/driver/driver.service';
 
 @Injectable()
 export class RideService {
@@ -22,18 +22,14 @@ export class RideService {
     @InjectRepository(Ride)
     private readonly rideRepository: Repository<Ride>,
 
-    @InjectRepository(Passenger)
-    private readonly passengerRepository: Repository<Passenger>,
+    private readonly driver: DriverService,
 
-    @InjectRepository(Driver)
-    private readonly driverRepository: Repository<Driver>,
+    private readonly passenger: PassengerService,
   ) {}
 
   async create({ destination, origin, passengerId, value }: CreateRideDto): Promise<RideShortResponseDTO> {
     try {
-      const passengerExists = await this.passengerRepository.findOne({
-        where: { id: passengerId },
-      });
+      const passengerExists = await this.passenger.findOne(passengerId);
       if (!passengerExists) throw new NotFoundException('Passenger id does not exists.');
 
       let ride = new Ride(origin, destination, value, passengerId);
@@ -83,7 +79,7 @@ export class RideService {
       if (ride.status === EStatusRide.FINISHED)
         throw new BadRequestException('It is not possible to change the status of a completed ride.');
 
-      const driver = await this.driverRepository.findOne({ where: { id: driverId } });
+      const driver = await this.driver.findOne(driverId);
       if (!driver) throw new NotFoundException('Does not exists driver with id');
 
       if (status === EStatusRide.IN_PROGRESS && ride.status === EStatusRide.WAIT) {

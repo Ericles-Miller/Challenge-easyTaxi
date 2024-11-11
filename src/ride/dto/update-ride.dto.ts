@@ -1,7 +1,7 @@
-import { EStatusRide } from 'src/domain/enums/status-rides.enum';
+import { EStatusRide } from 'src/ride/enums/status-rides.enum';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsUUID } from 'class-validator';
-import { IsEnumValidToRequest } from 'src/domain/validations/enum-validator';
+import { IsEnumValidToRequest } from 'src/ride/enums/validations/enum-validator';
 
 export class UpdateRideDto {
   @ApiProperty({
