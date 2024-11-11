@@ -1,23 +1,24 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { DriverService } from 'src/driver/driver.service';
-import { PassengerService } from 'src/passenger/passenger.service';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Driver } from 'src/driver/entities/driver.entity';
+import { Passenger } from 'src/passenger/entities/passenger.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PhoneValidatorService {
   constructor(
-    private readonly passengerService: PassengerService,
-    private readonly driverService: DriverService,
+    @InjectRepository(Passenger)
+    private readonly passengerRepository: Repository<Passenger>,
+
+    @InjectRepository(Driver)
+    private readonly driverRepository: Repository<Driver>,
   ) {}
 
   async validateUniquePhone(phone: string): Promise<void> {
-    const passengerExists = await this.passengerService.findByPhone(phone);
-    if (passengerExists) {
-      throw new ConflictException('Phone number already exists for a user');
-    }
+    const passengerExists = await this.passengerRepository.findOne({ where: { phone } });
+    if (passengerExists) throw new BadRequestException('Phone number already exists for a user');
 
-    const driverExists = await this.driverService.findByPhone(phone);
-    if (driverExists) {
-      throw new ConflictException('Phone number already exists for a user');
-    }
+    const driverExists = await this.driverRepository.findOne({ where: { phone } });
+    if (driverExists) throw new BadRequestException('Phone number already exists for a user');
   }
 }

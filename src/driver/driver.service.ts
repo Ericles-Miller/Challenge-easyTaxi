@@ -8,6 +8,7 @@ import { CreateDriverDto } from './dto/create-driver.dto';
 import { Driver } from './entities/driver.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PhoneValidatorService } from 'src/phone-validator/phone-validator.service';
 
 @Injectable()
 export class DriverService {
@@ -15,19 +16,12 @@ export class DriverService {
     @InjectRepository(Driver)
     private readonly repository: Repository<Driver>,
 
-    //private readonly passenger: PassengerService,
+    private readonly phoneValidator: PhoneValidatorService,
   ) {}
 
   async create({ car, name, phone }: CreateDriverDto): Promise<Driver> {
     try {
-      const driverExists = await this.repository.findOne({
-        where: { phone },
-      });
-
-      if (driverExists) throw new BadRequestException('This phone already exists to other user.');
-
-      //const phoneExists = await this.passenger.findPhone(phone);
-      //if (phoneExists) throw new BadRequestException('This phone already exists to other user.');
+      await this.phoneValidator.validateUniquePhone(phone);
 
       let driver = new Driver(name, phone, car);
 
